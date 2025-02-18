@@ -11,7 +11,8 @@
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 
-CallInsList = {
+CallInsMap = table.arrayToSet
+{
 	"Shutdown",
 	"LayoutButtons",
 	"ConfigureLayout",
@@ -147,8 +148,3 @@ CallInsList = {
 	"CrashingAircraft",
 	"ClearMapMarks",
 }
-
-CallInsMap = {}
-for _, callin in ipairs(CallInsList) do
-  CallInsMap[callin] = true
-end

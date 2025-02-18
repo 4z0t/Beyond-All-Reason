@@ -163,10 +163,7 @@ local flexCallIns = {
 	'FeatureDestroyed',
 	'UnsyncedHeightMapUpdate',
 }
-local flexCallInMap = {}
-for _, ci in ipairs(flexCallIns) do
-	flexCallInMap[ci] = true
-end
+local flexCallInMap = table.arrayToSet(flexCallIns)
 
 local callInLists = {
 	'FontsChanged',
@@ -1078,15 +1075,6 @@ end
 
 --------------------------------------------------------------------------------
 
-local function FindWidgetIndex(t, w)
-	for k, v in ipairs(t) do
-		if v == w then
-			return k
-		end
-	end
-	return nil
-end
-
 local function FindLowestIndex(t, i, layer)
 	for x = (i - 1), 1, -1 do
 		if t[x].whInfo.layer < layer then
@@ -1104,7 +1092,7 @@ function widgetHandler:RaiseWidgetRaw(widget)
 		if f == nil then
 			return
 		end
-		local i = FindWidgetIndex(t, w)
+		local i = table.findi(t, w)
 		if i == nil then
 			return
 		end
@@ -1138,7 +1126,7 @@ function widgetHandler:LowerWidgetRaw(widget)
 		if f == nil then
 			return
 		end
-		local i = FindWidgetIndex(t, w)
+		local i = table.findi(t, w)
 		if i == nil then
 			return
 		end

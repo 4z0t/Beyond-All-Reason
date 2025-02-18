@@ -21,14 +21,12 @@ UtilsGuard = true
 --------------------------------------------------------------------------------
 
 function Say(msg)
-  Spring.SendCommands({'say ' .. msg})
+  Spring.SendCommands({ 'say ' .. msg })
 end
-
 
 function SendCommand(msg)
-  Spring.SendCommands({msg})
+  Spring.SendCommands({ msg })
 end
-
 
 --------------------------------------------------------------------------------
 --
@@ -36,12 +34,11 @@ end
 --
 
 function Basename(fullpath)
-  local _,_,base = string.find(fullpath, "([^\\/:]*)$")
-  local _,_,path = string.find(fullpath, "(.*[\\/:])[^\\/:]*$")
+  local _, _, base = string.find(fullpath, "([^\\/:]*)$")
+  local _, _, path = string.find(fullpath, "(.*[\\/:])[^\\/:]*$")
   if (path == nil) then path = "" end
   return base, path
 end
-
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -53,6 +50,32 @@ function include(filename, envTable)
   return VFS.Include(LUAUI_DIRNAME .. filename, envTable)
 end
 
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
---------------------------------------------------------------------------------
---------------------------------------------------------------------------------
+function table.find(t, value)
+  for k, v in pairs(t) do
+    if v == value then
+      return k
+    end
+  end
+  return nil
+end
+
+function table.findi(t, value)
+  for i, v in ipairs(t) do
+    if v == value then
+      return i
+    end
+  end
+  return nil
+end
+
+
+function table.arrayToSet(t)
+  local s = {}
+  for _, v in ipairs(t) do
+    s[v] = true
+  end
+  return s
+end
