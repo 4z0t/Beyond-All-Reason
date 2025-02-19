@@ -428,10 +428,11 @@ if not pairsByKeys then
 		local i = 0           -- iterator variable
 		local iter = function() -- iterator function
 			i = i + 1
-			if keys[i] == nil then
+			local key = keys[i]
+			if key == nil then
 				return nil
 			else
-				return keys[i], tbl[keys[i]]
+				return key, tbl[key]
 			end
 		end
 		return iter

@@ -112,18 +112,29 @@ for unitDefID, unitDef in pairs(UnitDefs) do
 	unitScale[unitDefID] = math.max(unitDef.xsize, unitDef.zsize) * 5
 end
 
-local function pairsByKeys(t, f)
-  local a = {}
-  for n in pairs(t) do table.insert(a, n) end
-  table.sort(a, f)
-  local i = 0      -- iterator variable
-  local iter = function ()   -- iterator function
-    i = i + 1
-    if a[i] == nil then return nil
-    else return a[i], t[a[i]]
-    end
-  end
-  return iter
+---pairs-like iterator function traversing the table in the order of its keys.
+---Natural sort order will be used by default, optionally pass a comparator
+---function for custom sorting.
+---@generic K, V
+---@param tbl table<K, V>
+---@param keySortFunction? fun(a: K, b: K): boolean comparator function passed to table.sort for sorting keys
+---@return fun(table: table<K, V>, index?: K): K, V
+---(Implementation copied straight from the docs at https://www.lua.org/pil/19.3.html.)
+local function pairsByKeys(tbl, keySortFunction)
+	local keys = {}
+	for key in pairs(tbl) do table.insert(keys, key) end
+	table.sort(keys, keySortFunction)
+	local i = 0           -- iterator variable
+	local iter = function() -- iterator function
+		i = i + 1
+		local key = keys[i]
+		if key == nil then
+			return nil
+		else
+			return key, tbl[key]
+		end
+	end
+	return iter
 end
 
 local function trim(s)
