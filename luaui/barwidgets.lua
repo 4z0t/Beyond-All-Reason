@@ -244,6 +244,35 @@ local function r_ipairs(t)
 	return rev_iter, t, (1 + #t)
 end
 
+
+local mt = {
+	__div = function(self, other)
+		if type(other) == "function"then
+			return self
+		end
+		if other.value == "hello" then
+			return "hello world"
+		end
+		return self
+	end
+}
+
+local Select ={}
+local Where = {}
+local ToArray = {value = "hello"}
+local t = setmetatable({}, mt)
+
+
+
+
+Spring.Log("4z0t", LOG.ERROR,
+	t
+	/ Select
+	/ Where
+	/ function ()	end
+	/ ToArray
+)
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 
