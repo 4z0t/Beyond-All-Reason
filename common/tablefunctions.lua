@@ -421,20 +421,11 @@ if not pairsByKeys then
 	---@param keySortFunction? fun(a: K, b: K): boolean comparator function passed to table.sort for sorting keys
 	---@return fun(table: table<K, V>, index?: K): K, V
 	---@return table<K, V>
-	---(Implementation copied straight from the docs at https://www.lua.org/pil/19.3.html.)
+	---@return integer
 	function pairsByKeys(tbl, keySortFunction)
 		local keys = {}
 		for key in pairs(tbl) do table.insert(keys, key) end
 		table.sort(keys, keySortFunction)
-		local i = 0           -- iterator variable
-		local iter = function() -- iterator function
-			i = i + 1
-			if keys[i] == nil then
-				return nil
-			else
-				return keys[i], tbl[keys[i]]
-			end
-		end
-		return iter
+		return ipairs(keys)
 	end
 end
