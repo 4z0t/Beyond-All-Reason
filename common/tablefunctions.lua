@@ -420,7 +420,6 @@ if not pairsByKeys then
 	---@param tbl table<K, V>
 	---@param keySortFunction? fun(a: K, b: K): boolean comparator function passed to table.sort for sorting keys
 	---@return fun(table: table<K, V>, index?: K): K, V
-	---@return table<K, V>
 	---(Implementation copied straight from the docs at https://www.lua.org/pil/19.3.html.)
 	function pairsByKeys(tbl, keySortFunction)
 		local keys = {}
