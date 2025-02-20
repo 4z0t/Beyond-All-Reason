@@ -1,9 +1,22 @@
+---@declare-global
 --[[
 IMPORTANT NOTICE: Tests for these functions are provided via
 `common/tableFunctionsTests.lua`, but the tests do not run unless you uncomment
 them in `init.lua` (because they're not free to run, so we don't want them to
 run for end users.)
 ]]
+
+---#region Upvalues
+local type = type
+local pairs = pairs
+local tostring = tostring
+local ipairs = ipairs
+local table = table
+
+local TableInsert = table.insert
+local TableSort = table.sort
+---#endregion
+
 
 -- Lua 5.1 backwards compatibility
 table.pack = table.pack or function(...) return { n = select("#", ...), ... } end
@@ -189,7 +202,7 @@ end
 if not table.append then
 	function table.append(appendTarget, appendData)
 		for _, value in pairs(appendData) do
-			table.insert(appendTarget, value)
+			TableInsert(appendTarget, value)
 		end
 	end
 end
@@ -412,29 +425,29 @@ if not table.any then
 	end
 end
 
-if not pairsByKeys then
-	---pairs-like iterator function traversing the table in the order of its keys.
-	---Natural sort order will be used by default, optionally pass a comparator
-	---function for custom sorting.
-	---@generic K, V
-	---@param tbl table<K, V>
-	---@param keySortFunction? fun(a: K, b: K): boolean comparator function passed to table.sort for sorting keys
-	---@return fun(table: table<K, V>, index?: K): K, V
-	---(Implementation copied straight from the docs at https://www.lua.org/pil/19.3.html.)
-	function pairsByKeys(tbl, keySortFunction)
-		local keys = {}
-		for key in pairs(tbl) do table.insert(keys, key) end
-		table.sort(keys, keySortFunction)
-		local i = 0           -- iterator variable
-		local iter = function() -- iterator function
-			i = i + 1
-			local key = keys[i]
-			if key == nil then
-				return nil
-			else
-				return key, tbl[key]
-			end
+
+---pairs-like iterator function traversing the table in the order of its keys.
+---Natural sort order will be used by default, optionally pass a comparator
+---function for custom sorting.
+---@generic K, V
+---@param tbl table<K, V>
+---@param keySortFunction? fun(a: K, b: K): boolean comparator function passed to table.sort for sorting keys
+---@return fun(table: table<K, V>, index?: K): K, V
+---@return K[]
+---@return integer
+---(Implementation copied straight from the docs at https://www.lua.org/pil/19.3.html.)
+function pairsByKeys(tbl, keySortFunction)
+	local keys = {}
+	for key in pairs(tbl) do TableInsert(keys, key) end
+	TableSort(keys, keySortFunction)
+	local iter = function(_keys, i) -- iterator function
+		i = i + 1
+		local key = _keys[i]
+		if key == nil then
+			return nil
+		else
+			return key, tbl[key]
 		end
-		return iter
 	end
+	return iter, keys, 0
 end
