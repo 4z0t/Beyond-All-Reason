@@ -433,20 +433,20 @@ end
 ---@generic K, V
 ---@param tbl table<K, V>
 ---@param keySortFunction? fun(a: K, b: K): boolean comparator function passed to table.sort for sorting keys
----@return fun(keys: K[], index: integer): K, V
+---@return fun(keys: K[]): K, V
 ---@return K[]
----@return integer
 function pairsByKeys(tbl, keySortFunction)
 	local keys = {}
 	for key in pairs(tbl) do TableInsert(keys, key) end
 	TableSort(keys, keySortFunction)
-	return function(_keys, i)
+	local i = 0
+	return function(_keys)
 		i = i + 1
 		local key = _keys[i]
 		if key == nil then
-			return nil
+			return nil, nil
 		else
 			return key, tbl[key]
 		end
-	end, keys, 0
+	end, keys
 end
