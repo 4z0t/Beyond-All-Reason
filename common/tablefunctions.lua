@@ -11,7 +11,6 @@ local type = type
 local pairs = pairs
 local tostring = tostring
 local ipairs = ipairs
-local table = table
 
 local TableInsert = table.insert
 local TableSort = table.sort
