@@ -429,18 +429,18 @@ end
 ---pairs-like iterator function traversing the table in the order of its keys.
 ---Natural sort order will be used by default, optionally pass a comparator
 ---function for custom sorting.
+---(Implementation copied and modified straight from the docs at https://www.lua.org/pil/19.3.html.)
 ---@generic K, V
 ---@param tbl table<K, V>
 ---@param keySortFunction? fun(a: K, b: K): boolean comparator function passed to table.sort for sorting keys
----@return fun(table: table<K, V>, index?: K): K, V
+---@return fun(keys: K[], index: integer): K, V
 ---@return K[]
 ---@return integer
----(Implementation copied straight from the docs at https://www.lua.org/pil/19.3.html.)
 function pairsByKeys(tbl, keySortFunction)
 	local keys = {}
 	for key in pairs(tbl) do TableInsert(keys, key) end
 	TableSort(keys, keySortFunction)
-	local iter = function(_keys, i) -- iterator function
+	return function(_keys, i)
 		i = i + 1
 		local key = _keys[i]
 		if key == nil then
@@ -448,6 +448,5 @@ function pairsByKeys(tbl, keySortFunction)
 		else
 			return key, tbl[key]
 		end
-	end
-	return iter, keys, 0
+	end, keys, 0
 end
